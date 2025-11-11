@@ -86,7 +86,6 @@ export function LowBalanceAlerts({ balances }: LowBalanceAlertsProps) {
                 </div>
                 <div className="flex flex-col items-end gap-1">
                   <span className="font-bold text-red-600 dark:text-red-400">{alert.balance}</span>
-                  <span className="text-xs text-muted-foreground">~{alert.transactionsRemaining} tx left</span>
                 </div>
               </div>
             ))}
@@ -121,7 +120,6 @@ export function LowBalanceAlerts({ balances }: LowBalanceAlertsProps) {
                 </div>
                 <div className="flex flex-col items-end gap-1">
                   <span className="font-bold text-yellow-600 dark:text-yellow-400">{warning.balance}</span>
-                  <span className="text-xs text-muted-foreground">~{warning.transactionsRemaining} tx left</span>
                 </div>
               </div>
             ))}
@@ -156,7 +154,6 @@ export function LowBalanceAlerts({ balances }: LowBalanceAlertsProps) {
                 </div>
                 <div className="flex flex-col items-end gap-1">
                   <span className="font-bold text-green-600 dark:text-green-400">{signer.balance}</span>
-                  <span className="text-xs text-muted-foreground">~{signer.transactionsRemaining} tx left</span>
                 </div>
               </div>
             ))}

@@ -31,23 +31,22 @@ export const signers: SignersConfig[] = [
   { address: "0xfC01A703f41a9cdCbba126b13596881d462aa777", chain: "Polygon" },
 ]
 
-// Per-chain gas cost estimates (max gas used from recent transactions in native tokens)
-// These represent the typical maximum gas cost per transaction on each chain
-// Based on ~203,757 gas units for minting operations
+// Per-chain gas cost estimates (actual cost per transaction in native tokens)
+// Update these values based on real transaction costs from block explorers
 export const CHAIN_GAS_COSTS: Record<string, number> = {
-  "Ethereum Mainnet": 0.01, // ~203,757 gas at ~50 gwei
-  Polygon: 0.0001, // ~203,757 gas at ~0.5 gwei (very cheap)
-  Arbitrum: 0.00002, // ~203,757 gas at ~0.1 gwei (very low L2)
-  Optimism: 0.00002, // ~203,757 gas at ~0.1 gwei (very low L2)
-  Gnosis: 0.00002, // ~203,757 gas at ~0.1 gwei (xDAI stable)
-  Enuls: 0.0001, // Estimated for ~203,757 gas
-  Mantle: 0.00002, // ~203,757 gas at low L2 fees
-  Base: 0.00001, // ~203,757 gas at ~0.05 gwei (very low L2)
-  ApeChain: 0.00004, // Estimated for ~203,757 gas
-  Celo: 0.00002, // ~203,757 gas at low fees
-  Linea: 0.00002, // ~203,757 gas at low L2 fees
-  Chiliz: 0.0002, // ~203,757 gas at higher fees
-  UniChain: 0.00002, // ~203,757 gas at low L2 fees
+  "Ethereum Mainnet": 0.001,
+  Polygon: 0.001,
+  Arbitrum: 0.0001,
+  Optimism: 0.001,
+  Gnosis: 0.001,
+  Enuls: 0.001,
+  Mantle: 0.001,
+  Base: 0.001,
+  ApeChain: 0.001,
+  Celo: 0.001,
+  Linea: 0.001,
+  Chiliz: 0.001,
+  UniChain: 0.001,
 }
 
 // Number of transactions to reserve for low/warning thresholds

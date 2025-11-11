@@ -57,7 +57,6 @@ export function BalanceTable({ balances, loading }: BalanceTableProps) {
             <th className="text-left px-4 py-3 font-semibold text-sm text-muted-foreground">Address</th>
             <th className="text-left px-4 py-3 font-semibold text-sm text-muted-foreground">Chain</th>
             <th className="text-right px-4 py-3 font-semibold text-sm text-muted-foreground">Balance</th>
-            <th className="text-right px-4 py-3 font-semibold text-sm text-muted-foreground">Tx Remaining</th>
           </tr>
         </thead>
         <tbody>
@@ -93,7 +92,6 @@ export function BalanceTable({ balances, loading }: BalanceTableProps) {
               </td>
               <td className="px-4 py-3 text-right">
                 <span className="font-mono text-sm text-muted-foreground">
-                  ~{balance.transactionsRemaining.toLocaleString()}
                 </span>
               </td>
             </tr>
