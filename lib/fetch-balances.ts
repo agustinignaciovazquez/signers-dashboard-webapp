@@ -1,13 +1,26 @@
 import { ethers } from "ethers"
 import type { ChainsConfig, SignersConfig, BalanceData } from "./types"
-import { LOW_BALANCE_THRESHOLD, WARNING_BALANCE_THRESHOLD, CHAIN_COLORS } from "./config"
+import { 
+  CHAIN_COLORS, 
+  CHAIN_GAS_COSTS,
+  getLowBalanceThreshold, 
+  getWarningBalanceThreshold, 
+  getTransactionsRemaining 
+} from "./config"
 
 // Public RPC endpoints for each chain
 const RPC_ENDPOINTS: Record<number, string> = {
-  1: "https://eth.llamarpc.com",
-  137: "https://polygon-rpc.com",
-  42161: "https://arb1.arbitrum.io/rpc",
-  10: "https://mainnet.optimism.io",
+  10: "https://mainnet.optimism.io",        // Optimism
+  100: "https://rpc.gnosischain.com",       // Gnosis Chain
+  130: "https://mainnet.unichain.org",      // UniChain
+  137: "https://polygon-rpc.com",           // Polygon
+  5000: "https://rpc.mantle.xyz",           // Mantle
+  8453: "https://mainnet.base.org",         // Base
+  33139: "https://rpc.apechain.com",        // ApeChain
+  42161: "https://arb1.arbitrum.io/rpc",    // Arbitrum One
+  42220: "https://forno.celo.org",          // Celo
+  59144: "https://rpc.linea.build",         // Linea
+  88888: "https://rpc.chiliz.com",          // Chiliz
 }
 
 export async function fetchBalances(chains: ChainsConfig[], signers: SignersConfig[]): Promise<BalanceData[]> {
@@ -23,10 +36,15 @@ export async function fetchBalances(chains: ChainsConfig[], signers: SignersConf
       const formattedBalance = ethers.formatEther(balance)
       const balanceNum = Number.parseFloat(formattedBalance)
 
+      const lowThreshold = getLowBalanceThreshold(chain.name)
+      const warningThreshold = getWarningBalanceThreshold(chain.name)
+      const txRemaining = getTransactionsRemaining(balanceNum, chain.name)
+      const gasCost = CHAIN_GAS_COSTS[chain.name] || 0.001
+
       let status: "healthy" | "warning" | "low" = "healthy"
-      if (balanceNum < LOW_BALANCE_THRESHOLD) {
+      if (balanceNum < lowThreshold) {
         status = "low"
-      } else if (balanceNum < WARNING_BALANCE_THRESHOLD) {
+      } else if (balanceNum < warningThreshold) {
         status = "warning"
       }
 
@@ -39,6 +57,8 @@ export async function fetchBalances(chains: ChainsConfig[], signers: SignersConf
         status,
         chainColor: CHAIN_COLORS[chain.name] || "bg-gray-500",
         explorerUrl: `${chain.explorer}/address/${signer.address}`,
+        transactionsRemaining: txRemaining,
+        estimatedGasCost: gasCost,
       })
     } catch (error) {
       console.error(`Failed to fetch balance for ${signer.address}:`, error)
@@ -51,6 +71,8 @@ export async function fetchBalances(chains: ChainsConfig[], signers: SignersConf
         status: "healthy",
         chainColor: CHAIN_COLORS[chain!.name] || "bg-gray-500",
         explorerUrl: `${chain!.explorer}/address/${signer.address}`,
+        transactionsRemaining: 0,
+        estimatedGasCost: 0,
       })
     }
   }

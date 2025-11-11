@@ -18,4 +18,6 @@ export interface BalanceData {
   status: "healthy" | "warning" | "low"
   chainColor: string
   explorerUrl: string
+  transactionsRemaining: number
+  estimatedGasCost: number
 }
