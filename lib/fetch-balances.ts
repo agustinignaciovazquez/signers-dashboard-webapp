@@ -1,12 +1,6 @@
 import { ethers } from "ethers"
 import type { ChainsConfig, SignersConfig, BalanceData } from "./types"
-import { 
-  CHAIN_COLORS, 
-  CHAIN_GAS_COSTS,
-  getLowBalanceThreshold, 
-  getWarningBalanceThreshold, 
-  getTransactionsRemaining 
-} from "./config"
+import { CHAIN_COLORS, CHAIN_GAS_COSTS } from "./config"
 
 // Public RPC endpoints for each chain
 const RPC_ENDPOINTS: Record<number, string> = {
@@ -36,10 +30,15 @@ export async function fetchBalances(chains: ChainsConfig[], signers: SignersConf
       const formattedBalance = ethers.formatEther(balance)
       const balanceNum = Number.parseFloat(formattedBalance)
 
-      const lowThreshold = getLowBalanceThreshold(chain.name)
-      const warningThreshold = getWarningBalanceThreshold(chain.name)
-      const txRemaining = getTransactionsRemaining(balanceNum, chain.name)
+      // Use configured gas cost estimate for the chain
       const gasCost = CHAIN_GAS_COSTS[chain.name] || 0.001
+      
+      // Calculate transactions remaining
+      const txRemaining = Math.floor(balanceNum / gasCost)
+      
+      // Calculate thresholds based on gas cost
+      const lowThreshold = gasCost * 10 // 10 transactions
+      const warningThreshold = gasCost * 50 // 50 transactions
 
       let status: "healthy" | "warning" | "low" = "healthy"
       if (balanceNum < lowThreshold) {

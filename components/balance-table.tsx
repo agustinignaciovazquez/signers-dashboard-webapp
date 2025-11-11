@@ -47,6 +47,7 @@ export function BalanceTable({ balances, loading }: BalanceTableProps) {
     )
   }
 
+  // Balances are already sorted from parent component
   return (
     <div className="overflow-x-auto">
       <table className="w-full">
@@ -56,6 +57,7 @@ export function BalanceTable({ balances, loading }: BalanceTableProps) {
             <th className="text-left px-4 py-3 font-semibold text-sm text-muted-foreground">Address</th>
             <th className="text-left px-4 py-3 font-semibold text-sm text-muted-foreground">Chain</th>
             <th className="text-right px-4 py-3 font-semibold text-sm text-muted-foreground">Balance</th>
+            <th className="text-right px-4 py-3 font-semibold text-sm text-muted-foreground">Tx Remaining</th>
           </tr>
         </thead>
         <tbody>
@@ -71,7 +73,7 @@ export function BalanceTable({ balances, loading }: BalanceTableProps) {
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-1 font-mono text-sm text-blue-500 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 underline"
                 >
-                  {balance.shortAddress}
+                  {balance.address}
                   <ExternalLink className="w-3 h-3" />
                 </a>
               </td>
@@ -88,6 +90,11 @@ export function BalanceTable({ balances, loading }: BalanceTableProps) {
                     {balance.status === "low" ? "LOW" : balance.status === "warning" ? "WARNING" : "HEALTHY"}
                   </span>
                 </div>
+              </td>
+              <td className="px-4 py-3 text-right">
+                <span className="font-mono text-sm text-muted-foreground">
+                  ~{balance.transactionsRemaining.toLocaleString()}
+                </span>
               </td>
             </tr>
           ))}

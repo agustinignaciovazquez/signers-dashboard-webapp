@@ -1,15 +1,15 @@
 import { Card } from "@/components/ui/card"
 import type { BalanceData } from "@/lib/types"
-import { AlertTriangle, AlertCircle, TrendingDown } from "lucide-react"
+import { AlertTriangle, AlertCircle, TrendingDown, ExternalLink } from "lucide-react"
 
 interface LowBalanceAlertsProps {
   balances: BalanceData[]
 }
 
 export function LowBalanceAlerts({ balances }: LowBalanceAlertsProps) {
-  const criticalAlerts = balances.filter((b) => b.status === "low")
-  const warnings = balances.filter((b) => b.status === "warning")
-  const healthy = balances.filter((b) => b.status === "healthy")
+  const criticalAlerts = balances.filter((b) => b.status === "low").sort((a, b) => a.chainName.localeCompare(b.chainName))
+  const warnings = balances.filter((b) => b.status === "warning").sort((a, b) => a.chainName.localeCompare(b.chainName))
+  const healthy = balances.filter((b) => b.status === "healthy").sort((a, b) => a.chainName.localeCompare(b.chainName))
 
   const criticalCount = criticalAlerts.length
   const warningCount = warnings.length
@@ -73,10 +73,21 @@ export function LowBalanceAlerts({ balances }: LowBalanceAlertsProps) {
                 className="flex items-center justify-between p-2 bg-background/50 rounded border border-red-500/20"
               >
                 <div className="flex items-center gap-2 min-w-0">
-                  <span className="text-xs font-mono text-muted-foreground truncate">{alert.shortAddress}</span>
+                  <a
+                    href={alert.explorerUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1 text-xs font-mono text-blue-500 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 underline"
+                  >
+                    {alert.address}
+                    <ExternalLink className="w-3 h-3" />
+                  </a>
                   <span className="text-xs text-muted-foreground whitespace-nowrap">on {alert.chainName}</span>
                 </div>
-                <span className="font-bold text-red-600 dark:text-red-400 ml-2">{alert.balance}</span>
+                <div className="flex flex-col items-end gap-1">
+                  <span className="font-bold text-red-600 dark:text-red-400">{alert.balance}</span>
+                  <span className="text-xs text-muted-foreground">~{alert.transactionsRemaining} tx left</span>
+                </div>
               </div>
             ))}
           </div>
@@ -97,10 +108,21 @@ export function LowBalanceAlerts({ balances }: LowBalanceAlertsProps) {
                 className="flex items-center justify-between p-2 bg-background/50 rounded border border-yellow-500/20"
               >
                 <div className="flex items-center gap-2 min-w-0">
-                  <span className="text-xs font-mono text-muted-foreground truncate">{warning.shortAddress}</span>
+                  <a
+                    href={warning.explorerUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1 text-xs font-mono text-blue-500 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 underline"
+                  >
+                    {warning.address}
+                    <ExternalLink className="w-3 h-3" />
+                  </a>
                   <span className="text-xs text-muted-foreground whitespace-nowrap">on {warning.chainName}</span>
                 </div>
-                <span className="font-bold text-yellow-600 dark:text-yellow-400 ml-2">{warning.balance}</span>
+                <div className="flex flex-col items-end gap-1">
+                  <span className="font-bold text-yellow-600 dark:text-yellow-400">{warning.balance}</span>
+                  <span className="text-xs text-muted-foreground">~{warning.transactionsRemaining} tx left</span>
+                </div>
               </div>
             ))}
           </div>
@@ -121,10 +143,21 @@ export function LowBalanceAlerts({ balances }: LowBalanceAlertsProps) {
                 className="flex items-center justify-between p-2 bg-background/50 rounded border border-green-500/20"
               >
                 <div className="flex items-center gap-2 min-w-0">
-                  <span className="text-xs font-mono text-muted-foreground truncate">{signer.shortAddress}</span>
+                  <a
+                    href={signer.explorerUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1 text-xs font-mono text-blue-500 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 underline"
+                  >
+                    {signer.address}
+                    <ExternalLink className="w-3 h-3" />
+                  </a>
                   <span className="text-xs text-muted-foreground whitespace-nowrap">on {signer.chainName}</span>
                 </div>
-                <span className="font-bold text-green-600 dark:text-green-400 ml-2">{signer.balance}</span>
+                <div className="flex flex-col items-end gap-1">
+                  <span className="font-bold text-green-600 dark:text-green-400">{signer.balance}</span>
+                  <span className="text-xs text-muted-foreground">~{signer.transactionsRemaining} tx left</span>
+                </div>
               </div>
             ))}
           </div>

@@ -45,10 +45,21 @@ export default function Page() {
       )
     }
 
+    // Sort by status priority first (low > warning > healthy), then by selected sort option
+    const statusPriority = { low: 0, warning: 1, healthy: 2 }
+    
     if (sortBy === "balance") {
-      filtered.sort((a, b) => Number.parseFloat(a.balance) - Number.parseFloat(b.balance))
+      filtered.sort((a, b) => {
+        const statusDiff = statusPriority[a.status] - statusPriority[b.status]
+        if (statusDiff !== 0) return statusDiff
+        return Number.parseFloat(a.balance) - Number.parseFloat(b.balance)
+      })
     } else {
-      filtered.sort((a, b) => a.address.localeCompare(b.address))
+      filtered.sort((a, b) => {
+        const statusDiff = statusPriority[a.status] - statusPriority[b.status]
+        if (statusDiff !== 0) return statusDiff
+        return a.address.localeCompare(b.address)
+      })
     }
 
     setFilteredBalances(filtered)
