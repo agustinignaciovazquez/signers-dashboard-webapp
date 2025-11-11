@@ -16,8 +16,8 @@ export const signers: SignersConfig[] = [
 ]
 
 // Balance thresholds for alerts (in native tokens)
-export const LOW_BALANCE_THRESHOLD = 0.1
-export const WARNING_BALANCE_THRESHOLD = 0.5
+export const LOW_BALANCE_THRESHOLD = 0.05
+export const WARNING_BALANCE_THRESHOLD = 0.2
 
 // Chain colors for visual identification
 export const CHAIN_COLORS: Record<string, string> = {

@@ -10,8 +10,8 @@ interface FiltersProps {
   onChainChange: (chain: string) => void
   searchTerm: string
   onSearchChange: (term: string) => void
-  sortBy: "name" | "balance" | "status"
-  onSortChange: (sort: "name" | "balance" | "status") => void
+  sortBy: "address" | "balance"
+  onSortChange: (sort: "address" | "balance") => void
 }
 
 export function Filters({
@@ -28,7 +28,7 @@ export function Filters({
       <div className="relative flex-1">
         <Search className="absolute left-3 top-3 w-4 h-4 text-muted-foreground" />
         <Input
-          placeholder="Search by name or address..."
+          placeholder="Search by address..."
           value={searchTerm}
           onChange={(e) => onSearchChange(e.target.value)}
           className="pl-10"
@@ -53,9 +53,8 @@ export function Filters({
           <SelectValue placeholder="Sort by" />
         </SelectTrigger>
         <SelectContent>
-          <SelectItem value="name">Name</SelectItem>
+          <SelectItem value="address">Address</SelectItem>
           <SelectItem value="balance">Balance (Low First)</SelectItem>
-          <SelectItem value="status">Status Alert</SelectItem>
         </SelectContent>
       </Select>
     </div>
