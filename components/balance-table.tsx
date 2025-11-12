@@ -47,57 +47,95 @@ export function BalanceTable({ balances, loading }: BalanceTableProps) {
     )
   }
 
-  // Balances are already sorted from parent component
   return (
-    <div className="overflow-x-auto">
-      <table className="w-full">
-        <thead>
-          <tr className="border-b border-border">
-            <th className="text-left px-4 py-3 font-semibold text-sm text-muted-foreground">Status</th>
-            <th className="text-left px-4 py-3 font-semibold text-sm text-muted-foreground">Address</th>
-            <th className="text-left px-4 py-3 font-semibold text-sm text-muted-foreground">Chain</th>
-            <th className="text-right px-4 py-3 font-semibold text-sm text-muted-foreground">Balance</th>
-          </tr>
-        </thead>
-        <tbody>
-          {balances.map((balance, idx) => (
-            <tr key={idx} className="border-b border-border/50 hover:bg-muted/50 transition-colors">
-              <td className="px-4 py-3">
-                <div className="flex items-center justify-center">{getStatusIcon(balance.status)}</div>
-              </td>
-              <td className="px-4 py-3">
-                <a
-                  href={balance.explorerUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1 font-mono text-sm text-blue-500 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 underline"
-                >
-                  {balance.address}
-                  <ExternalLink className="w-3 h-3" />
-                </a>
-              </td>
-              <td className="px-4 py-3">
-                <span className="inline-flex items-center gap-2">
-                  <span className={`w-2 h-2 rounded-full ${balance.chainColor}`} />
-                  {balance.chainName}
-                </span>
-              </td>
-              <td className="px-4 py-3 text-right">
-                <div className="flex flex-col items-end gap-1">
-                  <span className="font-bold text-primary">{balance.balance}</span>
-                  <span className={getStatusBadge(balance.status)}>
-                    {balance.status === "low" ? "LOW" : balance.status === "warning" ? "WARNING" : "HEALTHY"}
-                  </span>
-                </div>
-              </td>
-              <td className="px-4 py-3 text-right">
-                <span className="font-mono text-sm text-muted-foreground">
-                </span>
-              </td>
+    <>
+      {/* Desktop view - table */}
+      <div className="hidden md:block overflow-x-auto">
+        <table className="w-full">
+          <thead>
+            <tr className="border-b border-border">
+              <th className="text-left px-4 py-3 font-semibold text-sm text-muted-foreground">Status</th>
+              <th className="text-left px-4 py-3 font-semibold text-sm text-muted-foreground">Address</th>
+              <th className="text-left px-4 py-3 font-semibold text-sm text-muted-foreground">Chain</th>
+              <th className="text-right px-4 py-3 font-semibold text-sm text-muted-foreground">Balance</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
+          </thead>
+          <tbody>
+            {balances.map((balance, idx) => (
+              <tr key={idx} className="border-b border-border/50 hover:bg-muted/50 transition-colors">
+                <td className="px-4 py-3">
+                  <div className="flex items-center justify-center">{getStatusIcon(balance.status)}</div>
+                </td>
+                <td className="px-4 py-3">
+                  <a
+                    href={balance.explorerUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1 font-mono text-sm text-blue-500 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 underline"
+                  >
+                    {balance.address}
+                    <ExternalLink className="w-3 h-3" />
+                  </a>
+                </td>
+                <td className="px-4 py-3">
+                  <span className="inline-flex items-center gap-2">
+                    <span className={`w-2 h-2 rounded-full ${balance.chainColor}`} />
+                    {balance.chainName}
+                  </span>
+                </td>
+                <td className="px-4 py-3 text-right">
+                  <div className="flex flex-col items-end gap-1">
+                    <span className="font-bold text-primary">{balance.balance}</span>
+                    <span className={getStatusBadge(balance.status)}>
+                      {balance.status === "low" ? "LOW" : balance.status === "warning" ? "WARNING" : "HEALTHY"}
+                    </span>
+                  </div>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      {/* Mobile view - cards */}
+      <div className="md:hidden space-y-3">
+        {balances.map((balance, idx) => (
+          <Card key={idx} className="p-4 hover:bg-muted/50 transition-colors">
+            <div className="space-y-3">
+              {/* Header with status and chain */}
+              <div className="flex items-start justify-between gap-2">
+                <div className="flex items-center gap-2">
+                  {getStatusIcon(balance.status)}
+                  <div className="flex items-center gap-1">
+                    <span className={`w-2 h-2 rounded-full ${balance.chainColor}`} />
+                    <span className="text-sm font-medium text-muted-foreground">{balance.chainName}</span>
+                  </div>
+                </div>
+                <span className={getStatusBadge(balance.status)}>
+                  {balance.status === "low" ? "LOW" : balance.status === "warning" ? "WARNING" : "HEALTHY"}
+                </span>
+              </div>
+
+              {/* Address */}
+              <a
+                href={balance.explorerUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1 font-mono text-xs text-blue-500 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 underline break-all"
+              >
+                {balance.shortAddress}
+                <ExternalLink className="w-3 h-3 flex-shrink-0" />
+              </a>
+
+              {/* Balance */}
+              <div className="flex justify-between items-center pt-2 border-t border-border/50">
+                <span className="text-xs text-muted-foreground">Balance</span>
+                <span className="font-bold text-primary">{balance.balance}</span>
+              </div>
+            </div>
+          </Card>
+        ))}
+      </div>
+    </>
   )
 }
